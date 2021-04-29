@@ -91,7 +91,7 @@ namespace BigRookGames.Weapons
             if (projectileToDisableOnFire != null)
             {
                 projectileToDisableOnFire.SetActive(false);
-                Invoke("ReEnableDisabledProjectile", 3);
+                Invoke("ReEnableDisabledProjectile", 0.5f);
             }
 
             // --- Handle Audio ---
