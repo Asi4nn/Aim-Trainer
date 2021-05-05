@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace BigRookGames.Weapons
     public class ProjectileController : MonoBehaviour
     {
         // --- Config ---
-        public float speed = 150;
+        public float speed = 400;
         public LayerMask collisionLayerMask;
 
         // --- Explosion VFX ---
@@ -43,7 +44,7 @@ namespace BigRookGames.Weapons
         private void OnCollisionEnter(Collision collision)
         {
             // --- return if not enabled because OnCollision is still called if compoenent is disabled ---
-            if (!enabled) return;
+            if (!enabled || collision.gameObject.tag == "Player") return;
 
             // --- Explode when hitting an object and disable the projectile mesh ---
             Explode();
@@ -55,7 +56,6 @@ namespace BigRookGames.Weapons
                 col.enabled = false;
             }
             disableOnHit.Stop();
-
 
             // --- Destroy this object after 2 seconds. Using a delay because the particle system needs to finish ---
             Destroy(gameObject, 5f);
