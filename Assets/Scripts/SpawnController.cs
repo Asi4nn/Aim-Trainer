@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpawnController : MonoBehaviour
 {
     public GameObject target;
-    public GameObject targetParent;
 
     [SerializeField] Vector3 spawnPosStart;
     [SerializeField] Vector3 spawnPosEnd;
@@ -19,7 +18,7 @@ public class SpawnController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnArcing", 2.0f, 5.0f);
+        InvokeRepeating("SpawnTarget", 2.0f, 3.0f);
     }
 
     // Update is called once per frame
@@ -28,12 +27,15 @@ public class SpawnController : MonoBehaviour
 
     }
 
-    void SpawnArcing()
+    void SpawnTarget()
     {
-        Transform spawnPos = target.transform;
-        spawnPos.position = GenerateRandomVector(spawnPosStart, spawnPosEnd, 1);
-        GameObject newTarget = Instantiate(target, targetParent.transform);
-        newTarget.GetComponent<TargetMovementController>().setInitVel(GenerateRandomVector(minAngle, maxAngle, Random.Range(minSpeed, maxSpeed)));
+        GameObject newTarget = ObjectPool.SharedInstance.GetPooledObject();
+        if (newTarget != null)
+        {
+            newTarget.GetComponent<TargetMovementController>().setInitVel(GenerateRandomVector(minAngle, maxAngle, Random.Range(minSpeed, maxSpeed)));
+            newTarget.transform.position = GenerateRandomVector(spawnPosStart, spawnPosEnd, 1);
+            newTarget.SetActive(true);
+        }
     }
 
     private Vector3 GenerateRandomVector(Vector3 start, Vector3 end, float multiplier)

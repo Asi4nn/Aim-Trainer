@@ -10,25 +10,22 @@ public class TargetMovementController : MonoBehaviour
 
     public AudioClip spawn;
 
-    public AudioSource hit;
+    private AudioSource hit;
 
     private void Start()
     {
-        AudioSource.PlayClipAtPoint(spawn, gameObject.transform.position);
-
         hit = GameObject.Find("FirstPersonController").GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-
+        rb.AddForceAtPosition(initVel, transform.position, ForceMode.Impulse);
     }
 
     public void setInitVel(Vector3 vel)
     {
         initVel = vel;
-        rb.AddForceAtPosition(initVel, transform.position, ForceMode.Impulse);
+        AudioSource.PlayClipAtPoint(spawn, gameObject.transform.position);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -36,7 +33,11 @@ public class TargetMovementController : MonoBehaviour
         if (collision.gameObject.CompareTag("Projectile"))
         {
             hit.Play();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+        if (collision.gameObject.CompareTag("Environment"))
+        {
+            gameObject.SetActive(false);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace BigRookGames.Weapons
         private void OnCollisionEnter(Collision collision)
         {
             // --- return if not enabled because OnCollision is still called if compoenent is disabled ---
-            if (!enabled || collision.gameObject.tag == "Player") return;
+            if (!enabled || collision.gameObject.tag != "Player") return;
 
             // --- Explode when hitting an object and disable the projectile mesh ---
             Explode();
