@@ -6,11 +6,11 @@ public class SpawnController : MonoBehaviour
 {
     public GameObject target;
 
-    [SerializeField] Vector3 spawnPosStart;
-    [SerializeField] Vector3 spawnPosEnd;
+    [SerializeField] float spawnDelay;
+    [SerializeField] float spawnRate;
 
-    [SerializeField] Vector3 minAngle;
-    [SerializeField] Vector3 maxAngle;
+    [SerializeField] List<List<Vector3>> spawnLocationList;
+    [SerializeField] List<List<Vector3>> spawnAngleList;
 
     [SerializeField] float minSpeed;
     [SerializeField] float maxSpeed;
@@ -18,13 +18,24 @@ public class SpawnController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnTarget", 2.0f, 3.0f);
-    }
+        // sample data
+        spawnLocationList = new List<List<Vector3>>
+        {
+            new List<Vector3> 
+            { 
+                new Vector3(-20, 5, 40), new Vector3(20, 10, 40) 
+            }
+        };
 
-    // Update is called once per frame
-    void Update()
-    {
+        spawnAngleList = new List<List<Vector3>>
+        {
+            new List<Vector3>
+            {
+                new Vector3(-1, 1, -1), new Vector3(1, 1, -1)
+            }
+        };
 
+        InvokeRepeating("SpawnTarget", spawnDelay, spawnRate);
     }
 
     void SpawnTarget()
@@ -32,8 +43,8 @@ public class SpawnController : MonoBehaviour
         GameObject newTarget = ObjectPool.SharedInstance.GetPooledObject();
         if (newTarget != null)
         {
-            newTarget.GetComponent<TargetMovementController>().setInitVel(GenerateRandomVector(minAngle, maxAngle, Random.Range(minSpeed, maxSpeed)));
-            newTarget.transform.position = GenerateRandomVector(spawnPosStart, spawnPosEnd, 1);
+            newTarget.transform.position = GenerateRandomVector(spawnLocationList, 1);
+            newTarget.GetComponent<TargetMovementController>().setInitVel(GenerateRandomVector(spawnAngleList, Random.Range(minSpeed, maxSpeed)));
             newTarget.SetActive(true);
         }
     }
@@ -42,5 +53,12 @@ public class SpawnController : MonoBehaviour
     {
         Vector3 v = new Vector3(Random.Range(start.x, end.x), Random.Range(start.y, end.y), Random.Range(start.z, end.z)) * multiplier;
         return v;
+    }
+
+    private Vector3 GenerateRandomVector(List<List<Vector3>> lst, float multiplier)
+    {
+        int index = Random.Range(0, lst.Count);
+
+        return GenerateRandomVector(lst[index][0], lst[index][1], multiplier);
     }
 }

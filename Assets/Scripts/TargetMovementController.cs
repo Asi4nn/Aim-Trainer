@@ -20,12 +20,12 @@ public class TargetMovementController : MonoBehaviour
     private void OnEnable()
     {
         rb.AddForceAtPosition(initVel, transform.position, ForceMode.Impulse);
+        AudioSource.PlayClipAtPoint(spawn, gameObject.transform.position);
     }
 
     public void setInitVel(Vector3 vel)
     {
         initVel = vel;
-        AudioSource.PlayClipAtPoint(spawn, gameObject.transform.position);
     }
 
     private void OnCollisionEnter(Collision collision)
