@@ -8382,8 +8382,8 @@ MonoBehaviour:
   target: {fileID: 5541182138460621211, guid: d37cd5227f37e8e45853061747a1a3c9, type: 3}
   spawnDelay: 5
   spawnRate: 2
-  minSpeed: 75
-  maxSpeed: 100
+  minSpeed: 80
+  maxSpeed: 90
 --- !u!4 &1095927344
 Transform:
   m_ObjectHideFlags: 0
